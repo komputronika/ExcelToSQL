@@ -91,10 +91,10 @@ foreach ($Sheets as $Index => $Name) {
         $ccc = 0;
         foreach ($Row as $v) {
             $sf = trim(strtolower($v));
-            if ($sf == '@@id') { $v = UUIDv4_bin(); }
-            if ($sf == '@@date') { $v = date("Y-m-d"); }
-            if ($sf == '@@datetime') { $v = date("Y-m-d H:i:s"); }
-            if ($sf == '@@rd') {
+            if ($sf == '@id') { $v = UUIDv4_bin(); }
+            if ($sf == '@date') { $v = date("Y-m-d"); }
+            if ($sf == '@datetime') { $v = date("Y-m-d H:i:s"); }
+            if ($sf == '@rd') {
                 $tt = intval(date("Y"));
                 $yy = ($tt-10) - rand(6,9);
                 $mm = rand(1, 12);
@@ -162,7 +162,7 @@ $sql.= "# DATE         : ".date("Y-m-d H:i:s")."\n";
 $sql.= "# AUTHOR       : ".$_POST['author']."\n";
 $sql.= "# ===============================================================\n\n";
 
-$sql.= "# To prevent the real database from being deleted or overwritten with this SQL,\n";
+$sql.= "# To prevent the real database from being deleted with this query,\n";
 $sql.= "# I have added the underscore '_' after the database name. \n";
 $sql.= "# You can test this SQL first, then rename it later.\n\n";
 
