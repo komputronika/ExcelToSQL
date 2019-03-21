@@ -1,4 +1,42 @@
-<!DOCTYPE doctype html>
+<?php
+/**
+ * Convert database schema in an Excel file to MySQL query
+ *
+ * @author     Komputronika <infokomputronika@gmail.com>
+ * @link       https://github.com/komputronika/ExcelToSQL
+ * 
+ */
+
+$default_timezone = "Asia/Jakarta";
+
+$regions = array(
+    'Africa' => DateTimeZone::AFRICA,
+    'America' => DateTimeZone::AMERICA,
+    'Antarctica' => DateTimeZone::ANTARCTICA,
+    'Asia' => DateTimeZone::ASIA,
+    'Atlantic' => DateTimeZone::ATLANTIC,
+    'Europe' => DateTimeZone::EUROPE,
+    'Indian' => DateTimeZone::INDIAN,
+    'Pacific' => DateTimeZone::PACIFIC
+);
+$timezones = array();
+foreach ($regions as $name => $mask)
+{
+    $zones = DateTimeZone::listIdentifiers($mask);
+    
+    foreach($zones as $timezone)
+    {
+        $time = new DateTime(NULL, new DateTimeZone($timezone));
+        $hh = ceil($time->getOffset()/3600);
+        $mm = str_pad( abs($time->getOffset() % 3600)/60, 2, "0", STR_PAD_LEFT);
+
+        $offset = $hh.":".$mm;
+        if ($hh>0) $offset = "+".$offset;
+        $timezones[$name][$timezone] = $offset;
+    }
+}
+
+?><!DOCTYPE doctype html>
 <html lang="en">
 <head>
     <title>Excel to MySQL Converter</title>
@@ -32,50 +70,14 @@
 </head>
 
 <body>
-
-<?php
-
-$regions = array(
-    'Africa' => DateTimeZone::AFRICA,
-    'America' => DateTimeZone::AMERICA,
-    'Antarctica' => DateTimeZone::ANTARCTICA,
-    'Asia' => DateTimeZone::ASIA,
-    'Atlantic' => DateTimeZone::ATLANTIC,
-    'Europe' => DateTimeZone::EUROPE,
-    'Indian' => DateTimeZone::INDIAN,
-    'Pacific' => DateTimeZone::PACIFIC
-);
-$timezones = array();
-foreach ($regions as $name => $mask)
-{
-    $zones = DateTimeZone::listIdentifiers($mask);
-    
-    foreach($zones as $timezone)
-    {
-        $time = new DateTime(NULL, new DateTimeZone($timezone));
-        $hh = ceil($time->getOffset()/3600);
-        $mm = str_pad( abs($time->getOffset() % 3600)/60, 2, "0", STR_PAD_LEFT);
-
-        $offset = $hh.":".$mm;
-        if ($hh>0) $offset = "+".$offset;
-
-        // print "$timezone = ".$offset."<br>";
-
-        // $ampm = $time->format('H') > 12 ? ' ('. $time->format('g:i a'). ')' : '';
-        // $timezones[$name][$timezone] = substr($timezone, strlen($name) + 1) . ' - ' . $time->format('H:i') . $ampm;
-
-        $timezones[$name][$timezone] = $offset;
-    }
-}
-?>
     <div class="container">
         <div class="row">
             <div class="col-12">
 
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="card-title font-weight-bold">MYSQL SQL Converter</h2>
-                        <h3 class="card-subtitle mb-2 text-muted">From Excel (.xls/.xlsx) file</h4>
+                        <h2 class="card-title font-weight-bold">Excel to SQL Converter</h2>
+                        <h3 class="card-subtitle mb-2 text-muted">From Excel (.xls/.xlsx) file to MySQL</h4>
                       </div>
                     <div class="card-body">
                         
@@ -101,13 +103,13 @@ foreach ($regions as $name => $mask)
 <div class="form-check">
   <input class="form-check-input" type="radio" name="idcol" id="idcol" value="ai" checked>
   <label class="form-check-label" for="idcol">
-    Unsigned Integer - Auto Increment
+    UNSIGNED INTEGER - Auto Increment
   </label>
 </div>
 <div class="form-check">
   <input class="form-check-input" type="radio" name="idcol" id="idcol" value="uuid">
   <label class="form-check-label" for="idcol">
-    UUID() - Auto generate
+    UUID() - Auto generate with trigger
   </label>
 </div>
 
@@ -121,7 +123,11 @@ foreach($timezones as $region => $list)
     print '<optgroup label="' . $region . '">' . "\n";
     foreach($list as $name => $timezone)
     {
-        print '<option value="' . $timezone . '">' . $name . '</option>' . "\n";
+        if (trim($name)==$default_timezone) {
+            print '<option value="' . $timezone . '" selected>' . $name . '</option>' . "\n";
+        } else {
+            print '<option value="' . $timezone . '">' . $name . '</option>' . "\n";
+        }
     }
     print '<optgroup>' . "\n";
 }
@@ -129,6 +135,11 @@ foreach($timezones as $region => $list)
       </select>
 </div>
 
+
+<div class="form-group">
+    <label for="author"><b>Author</b></label>
+    <input type="text" class="form-control" id="author" name="author" placeholder="Author" value="Komputronika">
+</div>
 
 <div class="submit">
   <button type="submit" value="submit" name="submit" class="btn btn-primary">Convert</button>
