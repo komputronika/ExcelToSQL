@@ -28,10 +28,52 @@ button {
 </style>
 
 <script>
+
+function copyStringToClipboard () {
+   // Create new element
+   var el = document.createElement('textarea');
+   // Set value (string to be copied)
+   el.value = document.getElementById("code").innerText;;
+   // Set non-editable to avoid focus and move outside of view
+   el.setAttribute('readonly', '');
+   el.style = {position: 'absolute', left: '-9999px'};
+   document.body.appendChild(el);
+   // Select text inside element
+   el.select();
+   // Copy text to clipboard
+   document.execCommand('copy');
+   // Remove temporary element
+   document.body.removeChild(el);
+   alert("SQL Copied to clipboard");
+}
+
+
+function myFunction() {
+  /* Get the text field */
+  var copyText = document.getElementById("code");
+
+  /* Select the text field */
+  //copyText.select();
+
+  if(document.copyText.createTextRange) {
+    var range = document.body.createTextRange();
+    range.moveToElementText(elm);
+    range.select();
+    document.execCommand("Copy");
+    alert("SQL Copied to clipboard");
+  }
+
+  /* Copy the text inside the text field */
+  //document.execCommand("copy");
+
+  /* Alert the copied text */
+  //alert("SQL Copied to clipboard");
+}
+
 function copyClipboard() {
   var elm = document.getElementById("code");
-  // for Internet Explorer
 
+  // for Internet Explorer
   if(document.body.createTextRange) {
     var range = document.body.createTextRange();
     range.moveToElementText(elm);
@@ -57,7 +99,7 @@ function copyClipboard() {
 </head>
 <body>
 
-    <button onclick="history.back()">Back to form</button> <button onclick="copyClipboard()">Copy SQL</button>
+    <button onclick="history.back()">Back to form</button> <button onclick="copyStringToClipboard()">Copy SQL</button>
 
     <div class="main">
         <pre id="code" 
