@@ -70,6 +70,7 @@ foreach ($Sheets as $Index => $Name) {
     $n=0;
     $col = array();
     $passcol = -1;
+    $cntr = 0;
     foreach ($buff as $Key => $Row) {
         $n++;
         if ($n==1) {
@@ -91,24 +92,42 @@ foreach ($Sheets as $Index => $Name) {
         $ccc = 0;
         foreach ($Row as $v) {
             $sf = trim(strtolower($v));
-            if ($sf == '@id') { $v = UUIDv4_bin(); }
-            if ($sf == '@date') { $v = date("Y-m-d"); }
-            if ($sf == '@datetime') { $v = date("Y-m-d H:i:s"); }
+            $v = "'$v'";
+            if ($sf == '@id') { 
+            
+                if ($id_type=='uuid') {
+                    $v = str_replace("-","", UUIDv4());
+                    
+                    //$v = $cntr;
+
+                    $v = "'".UUIDv4()."'";
+                    //$v = " UNHEX('$v')";
+                    //$v = " CONV( REPLACE('$v', '-', ''), 16, 2) ";
+
+                } else {
+                    $v = $cntr;
+                } 
+
+            }
+            if ($sf == '@date') { $v = "'".date("Y-m-d")."'"; }
+            if ($sf == '@datetime') { $v = "'".date("Y-m-d H:i:s")."'"; }
             if ($sf == '@rd') {
                 $tt = intval(date("Y"));
                 $yy = ($tt-10) - rand(6,9);
                 $mm = rand(1, 12);
                 $dd = rand(1, 28);
 
-                $v = date("$yy-$mm-$dd");
+                $v = "'".date("$yy-$mm-$dd")."'";
             }
             //if ($ccc == $passcol) { $v = md5($v); }
-            $val .= "'$v', ";
+            $val .= "$v, ";
             $ccc++;
+
         }
         $val = substr($val,0,-2);
         $tbl .= "INSERT INTO $Name($cn) ";
         $tbl .= "VALUES($val);".PHP_EOL;
+        $cntr++;
     }
 
     $tbl .= '/* ----------------------------- */'.PHP_EOL.PHP_EOL;
@@ -173,18 +192,18 @@ $sql.= "DROP DATABASE IF EXISTS `{$dbname}`;\n";
 $sql.= "CREATE DATABASE `{$dbname}`;\n";
 $sql.= "USE `{$dbname}`;\n\n";
 
-$sql.= "/* ============================= */".PHP_EOL;
-$sql.= "/* FUNCTION */".PHP_EOL;
-$sql.= "/* ============================= */".PHP_EOL;
+/*$sql.= "/* ============================= ".PHP_EOL;
+$sql.= "/* FUNCTION ".PHP_EOL;
+$sql.= "/* ============================= ".PHP_EOL;
 $sql.= "DELIMITER ;;\n";
-$sql.= "CREATE FUNCTION MY_UUID() RETURNS BINARY DETERMINISTIC\n";
+$sql.= "CREATE FUNCTION MY_UUID() RETURNS BINARY(16)\n";
 $sql.= "BEGIN\n";
 $sql.= "    DECLARE bindata BINARY(16);\n";
 $sql.= "    SET bindata = UNHEX( REPLACE( UUID() , '-' , '' ) );\n";
-$sql.= "RETURN (bindata);\n";
+$sql.= "RETURN bindata;\n";
 
 $sql.= "END\n";
-$sql.= ";;\n\n\n";
+$sql.= ";;\n\n\n";*/
 
 $col_create = array("colname" => "created_at",
                     "comment"=> "Waktu insert @create", // Jangan hapus @create
@@ -270,7 +289,7 @@ foreach($data as $table_name => $col) {
 
             if (strtolower($c["ai"])=="yes" and $_POST["idcol"]=="uuid") {
 
-                $type = "BINARY(16)";
+                $type = "VARCHAR(36)";
 
             } else {
 
@@ -450,7 +469,8 @@ foreach($data as $table_name => $col) {
         $sql .= "FOR EACH ROW\n";
         $sql .= "BEGIN\n";
         $sql .= "  IF new.$id_col IS NULL OR new.$id_col='' THEN\n";
-        $sql .= "    SET new.$id_col = MY_UUID();\n";
+        //$sql .= "    SET new.$id_col = UNHEX( REPLACE( UUID() , '-' , '' ) );\n";
+        $sql .= "    SET new.$id_col = UUID();\n";
         $sql .= "  END IF;\n";
         $sql .= "END\n";
         $sql .= ";;\n\n";
