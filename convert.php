@@ -61,9 +61,9 @@ foreach ($Sheets as $Index => $Name) {
         continue;
     }
 
-    $tbl .= '/* ----------------------------- */'.PHP_EOL;
-    $tbl .= '/* DATA: '.$Name.' */'.PHP_EOL;
-    $tbl .= '/* ----------------------------- */'.PHP_EOL;
+    $tbl .= '# -----------------------------'.PHP_EOL;
+    $tbl .= '# DATA: '.$Name.PHP_EOL;
+    $tbl .= '# -----------------------------'.PHP_EOL;
 
     $buff->ChangeSheet($Index);
 
@@ -130,7 +130,7 @@ foreach ($Sheets as $Index => $Name) {
         $cntr++;
     }
 
-    $tbl .= '/* ----------------------------- */'.PHP_EOL.PHP_EOL;
+    $tbl .= '# -----------------------------'.PHP_EOL.PHP_EOL;
 }
 
 $buff->ChangeSheet(0);
@@ -263,9 +263,9 @@ foreach($data as $table_name => $col) {
         $col[] = $col_isdel;
     }
 
-    $sql .= "/* ============================= */\n";
-    $sql .= "/* ($counter) TABLE: $table_name */\n"; $counter++;
-    $sql .= "/* ============================= */\n";
+    $sql .= "# =============================\n";
+    $sql .= "# ($counter) TABLE: $table_name\n"; $counter++;
+    $sql .= "# =============================\n";
     $sql .= "CREATE TABLE `$table_name` (\n";
 
     $pk = NULL;
@@ -462,7 +462,7 @@ foreach($data as $table_name => $col) {
 
     if ($_POST["idcol"]=="uuid") {
 
-        $sql .= "/* === TRIGGER ================= */\n";
+        $sql .= "# === TRIGGER =================\n";
         $sql .= "DELIMITER ;;\n";
         $sql .= "CREATE TRIGGER before_insert_$table_name\n";
         $sql .= "BEFORE INSERT ON `$table_name`\n";
@@ -481,7 +481,7 @@ foreach($data as $table_name => $col) {
 
 
 $all = $sql . $tbl;
-$all .= "/* === END OF SQL ============== */";
+$all .= "# === END OF SQL ==============";
 
 file_put_contents("$dbname.sql",$all);
 echo str_replace( "{{content}}", $all, file_get_contents("template.html") );
