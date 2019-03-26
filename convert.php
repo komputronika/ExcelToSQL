@@ -120,6 +120,7 @@ foreach ($Sheets as $Index => $Name) {
                 $v = "'".date("$yy-$mm-$dd")."'";
             }
             //if ($ccc == $passcol) { $v = md5($v); }
+            
             $val .= "$v, ";
             $ccc++;
 
