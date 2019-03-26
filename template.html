@@ -29,11 +29,20 @@ button {
 
 <script>
 
+function copyDivToClipboard() {
+    var range = document.createRange();
+    range.selectNode(document.getElementById("code"));
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    document.execCommand("copy")
+    alert("SQL Copied to clipboard");
+}    
+
 function copyStringToClipboard () {
    // Create new element
    var el = document.createElement('textarea');
    // Set value (string to be copied)
-   el.value = document.getElementById("code").innerText;;
+   el.value = document.getElementById("code").innerText || document.getElementById("code").textContent;
    // Set non-editable to avoid focus and move outside of view
    el.setAttribute('readonly', '');
    el.style = {position: 'absolute', left: '-9999px'};
@@ -99,7 +108,7 @@ function copyClipboard() {
 </head>
 <body>
 
-    <button onclick="history.back()">Back to form</button> <button onclick="copyStringToClipboard()">Copy SQL</button>
+    <button onclick="history.back()">Back to form</button> <button onclick="copyDivToClipboard()">Copy SQL</button>
 
     <div class="main">
         <pre id="code" 

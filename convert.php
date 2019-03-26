@@ -154,6 +154,8 @@ foreach($buff as $a) {
         for($i=1; $i<=8; $i++) {
             if (empty($a[$i])) $cb++;
         }
+        // print("<pre>");
+        // print_r($a);
         if ($cb<8) {
             $data["$table_name"][] = array("colname" => trim($a[1]),
                                            "comment" => trim(str_replace('"','',$a[2])),
@@ -169,6 +171,38 @@ foreach($buff as $a) {
                                            "fkcol"   => trim($a[12])
                                            );
         }
+        /*if ($cb<8) {
+            
+            // [0] => item
+            // [1] => branch_id
+            // [2] => Branch that owns
+            // [3] => int
+            // [4] => 
+            // [5] => yes
+            // [6] => 
+            // [7] => yes
+            // [8] => 
+            // [9] => 
+            // [10] => * 100.00
+            // [11] => yes
+            // [12] => branch
+            // [13] => branch_id
+            
+            $data["$table_name"][] = array("colname" => trim($a[1]),
+                                           "comment" => trim(str_replace('"','',$a[2])),
+                                           "type"    => trim($a[3]),
+                                           "size"    => str_replace('* ','',trim($a[4])),
+                                           "notnull" => trim($a[5]),
+                                           "default" => trim($a[6]),
+                                           "ai"      => trim($a[7]),
+                                           "start"   => trim($a[8]),
+                                           "primary" => trim($a[9]),
+                                           "key"     => trim($a[11]),
+                                           "fkref"   => trim($a[12]),
+                                           "fkcol"   => trim($a[13])
+                                           );
+        }*/
+
     }
 }
 unset($buff);
@@ -348,7 +382,8 @@ foreach($data as $table_name => $col) {
         if (strtolower($c["notnull"]) =="yes") {
             $not_null = "NOT NULL";
         } else {
-            $not_null = "NULL";
+            //$not_null = "NULL";
+            $not_null = "";
         }
 
         if (!empty($c["default"])){
