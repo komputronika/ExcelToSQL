@@ -172,7 +172,7 @@ foreach($buff as $a) {
                                            );
         }
         /*if ($cb<8) {
-            
+
             // [0] => item
             // [1] => branch_id
             // [2] => Branch that owns
@@ -386,7 +386,8 @@ foreach($data as $table_name => $col) {
             $not_null = "";
         }
 
-        if (!empty($c["default"])){
+        //if (!empty($c["default"])){
+        if ($c["default"]!=""){
             if (substr($c["default"],0,1)=="@") {
                 $default = "DEFAULT ".substr($c["default"],1);
             } else {
