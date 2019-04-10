@@ -4,7 +4,7 @@
  *
  * @author     Komputronika <infokomputronika@gmail.com>
  * @link       https://github.com/komputronika/ExcelToSQL
- * 
+ *
  */
 
 $default_timezone = "Asia/Jakarta";
@@ -17,21 +17,25 @@ $regions = array(
     'Atlantic' => DateTimeZone::ATLANTIC,
     'Europe' => DateTimeZone::EUROPE,
     'Indian' => DateTimeZone::INDIAN,
-    'Pacific' => DateTimeZone::PACIFIC
+    'Pacific' => DateTimeZone::PACIFIC,
 );
 $timezones = array();
 foreach ($regions as $name => $mask)
 {
     $zones = DateTimeZone::listIdentifiers($mask);
-    
-    foreach($zones as $timezone)
+
+    foreach ($zones as $timezone)
     {
         $time = new DateTime(NULL, new DateTimeZone($timezone));
-        $hh = ceil($time->getOffset()/3600);
-        $mm = str_pad( abs($time->getOffset() % 3600)/60, 2, "0", STR_PAD_LEFT);
+        $hh = ceil($time->getOffset() / 3600);
+        $mm = str_pad(abs($time->getOffset() % 3600) / 60, 2, "0", STR_PAD_LEFT);
 
-        $offset = $hh.":".$mm;
-        if ($hh>0) $offset = "+".$offset;
+        $offset = $hh . ":" . $mm;
+        if ($hh > 0)
+        {
+            $offset = "+" . $offset;
+        }
+
         $timezones[$name][$timezone] = $offset;
     }
 }
@@ -47,7 +51,7 @@ foreach ($regions as $name => $mask)
     <style>
     body {
         margin: 1rem;
-    }    
+    }
     .submit {
         margin-top: 1rem;
     }
@@ -60,12 +64,12 @@ foreach ($regions as $name => $mask)
         margin-bottom: 0.0 !important;
     }
 
-    /* #convert-form 
+    /* #convert-form
     {
         font-size: 120%;
     } */
-    
-    </style>    
+
+    </style>
 
 </head>
 
@@ -80,7 +84,7 @@ foreach ($regions as $name => $mask)
                         <h3 class="card-subtitle mb-2 text-muted">From Excel (.xls/.xlsx) file to MySQL</h4>
                       </div>
                     <div class="card-body">
-                        
+
                         <p class="card-text">
 
 <form id="convert-form" method="POST" action="convert.php" enctype="multipart/form-data">
@@ -90,11 +94,20 @@ foreach ($regions as $name => $mask)
   </div>
 
 
-  <b>Moment column</b>
+  <b>Date column</b>
   <div class="form-check">
       <input class="form-check-input" type="checkbox" value="1" id="moment" name="moment">
       <label class="form-check-label" for="moment">
         Automatically add column: created_at, updated_at, deleted_at, is_deleted
+      </label>
+  </div>
+<br/>
+
+<b>Drop Database</b>
+  <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="1" id="drop" name="drop" checked>
+      <label class="form-check-label" for="drop">
+        Drop database before create table
       </label>
   </div>
 <br/>
@@ -118,14 +131,17 @@ foreach ($regions as $name => $mask)
       <label for="inlineFormCustomSelect"><b>Database Timezone</b></label>
       <select class="form-control" id="timezone" name="timezone">
 <?php
-foreach($timezones as $region => $list)
+foreach ($timezones as $region => $list)
 {
     print '<optgroup label="' . $region . '">' . "\n";
-    foreach($list as $name => $timezone)
+    foreach ($list as $name => $timezone)
     {
-        if (trim($name)==$default_timezone) {
+        if (trim($name) == $default_timezone)
+        {
             print '<option value="' . $timezone . '" selected>' . $name . '</option>' . "\n";
-        } else {
+        }
+        else
+        {
             print '<option value="' . $timezone . '">' . $name . '</option>' . "\n";
         }
     }
@@ -143,14 +159,14 @@ foreach($timezones as $region => $list)
 
 <div class="submit">
   <button type="submit" value="submit" name="submit" class="btn btn-primary">Convert</button>
-</div>    
+</div>
 
 </form>
 
 
 
                         </p>
-                        
+
                   </div>
                 </div>
             </div>
