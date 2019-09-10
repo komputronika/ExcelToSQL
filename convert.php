@@ -170,7 +170,7 @@ foreach ($buff as $a)
     $i++;
     if ($i == 1)
     {
-        $dbname = $a[0] . "_" . date("Ymd-his");
+        $dbname = $a[0] . "_" . date("ymd");
         $engine = $a[1];
         $charset = $a[2];
         continue;
