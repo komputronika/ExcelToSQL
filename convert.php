@@ -170,7 +170,7 @@ foreach ($buff as $a)
     $i++;
     if ($i == 1)
     {
-        $dbname = $a[0] . "_";
+        $dbname = $a[0] . "_" . date("Ymd-his");
         $engine = $a[1];
         $charset = $a[2];
         continue;
@@ -183,7 +183,10 @@ foreach ($buff as $a)
     }
 
     $table_name = trim($a[0]);
-    if (!empty($table_name))
+    if (
+        !empty($table_name) and 
+        substr($table_name,0,1)!='#'
+       )
     {
         $cb = 0;
         for ($i = 1; $i <= 8; $i++)
