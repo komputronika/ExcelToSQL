@@ -54,6 +54,8 @@ else
 
 $use_moment = $_POST['moment'];
 $id_type = $_POST['idcol'];
+$generate_fk = $_POST['fk'];
+$insert_data = $_POST['insert'];
 $drop_db = strval($_POST['drop']);
 
 $buff = new SpreadsheetReader("./upload/" . $file_name);
@@ -515,6 +517,21 @@ foreach ($data as $table_name => $col)
             //"REFERENCES $refname(`".$c["colname"]."`)";
             //FOREIGN KEY fk_category(category_id) REFERENCES categories(category_id)
             //CONSTRAINT `FK_id` FOREIGN KEY (`id`) REFERENCES `table-A` (`id`)
+
+            $fk = array();
+
+            /* ALTER TABLE Orders
+            ADD CONSTRAINT FK_PersonOrder
+            FOREIGN KEY (PersonID) REFERENCES Persons(PersonID); */
+
+            $a = array();
+            $a["table"] = $table_name;
+            $a["refname"] = $refname;
+            $a["fkcol"] = $c["fkcol"];
+            $a["colname"] = $c["colname"];
+
+            $alter_fk[] = $a;
+
         }
 
         if (strtolower($c["primary"]) == "yes" and empty($pk))
@@ -644,7 +661,38 @@ foreach ($data as $table_name => $col)
     $sql .= "\n";
 }
 
-$all = $sql . $tbl;
+
+/* $fk[] = //"CONSTRAINT const_{$table_name}_$refname ".
+            "CONSTRAINT `FK_" . $c["colname"] . "` " .
+            //"FOREIGN KEY fk_{$table_name}_$refname(".$c["colname"].") ".
+            
+            "FOREIGN KEY fk_{$table_name}(`" . $c["colname"] . "`) " .
+            //"FOREIGN KEY `" . $c["colname"] . "` " .
+            
+            
+            //"FOREIGN KEY (".$c["colname"].") ".
+            "REFERENCES $refname(`" . $c["fkcol"] . "`)"; */
+
+if ($generate_fk=='1' and count($alter_fk)) {
+    $sql.= "# =============================\n";
+    $sql.= "# Alter table for FK\n";
+    $sql.= "# =============================\n";
+
+    foreach($alter_fk as $kel => $val) {
+        $o = (object) $val;
+        $sql.= "ALTER TABLE $o->table\n";
+        $sql.= "ADD CONSTRAINT `FK_$o->table"."_$o->colname`\n";
+        $sql.= "FOREIGN KEY fk_$o->table(`$o->colname`)\n"; 
+        $sql.= "REFERENCES $o->refname(`$o->fkcol`); \n\n";
+    }
+}
+
+//$all = $sql . $tbl;
+$all = $sql;
+if ($insert_data == '1') {
+    $all.= $tbl;
+}
+
 $all .= "# === END OF SQL ==============";
 
 file_put_contents("$dbname.sql", $all);

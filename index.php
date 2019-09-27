@@ -87,7 +87,7 @@ foreach ($regions as $name => $mask)
 
                         <p class="card-text">
 
-<form id="convert-form" method="POST" action="convert.php" enctype="multipart/form-data">
+<form id="convert-form" method="POST" action="convert2.php" enctype="multipart/form-data">
   <div class="form-group">
     <label for="file"><b>Choose Excel file</b></label>
     <input type="file" accept=".xls,.xlsx" class="form-control-file" id="file" name="file">
@@ -112,6 +112,25 @@ foreach ($regions as $name => $mask)
   </div>
 <br/>
 
+<b>Generate Foreign Key</b>
+  <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="1" id="fk" name="fk" checked>
+      <label class="form-check-label" for="drop">
+        Yes
+      </label>
+  </div>
+<br/>
+
+<b>Generate Insert</b>
+  <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="1" id="insert" name="insert" checked>
+      <label class="form-check-label" for="drop">
+        Yes
+      </label>
+  </div>
+<br/>
+
+
 <b>Type for ID Column</b>
 <div class="form-check">
   <input class="form-check-input" type="radio" name="idcol" id="idcol" value="ai" checked>
@@ -119,6 +138,7 @@ foreach ($regions as $name => $mask)
     UNSIGNED INTEGER - Auto Increment
   </label>
 </div>
+
 <div class="form-check">
   <input class="form-check-input" type="radio" name="idcol" id="idcol" value="uuid">
   <label class="form-check-label" for="idcol">
