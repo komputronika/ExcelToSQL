@@ -1,5 +1,5 @@
 r
-upload/
+upload/*.xls
 errors.log
 *.sql
 

@@ -6,14 +6,15 @@
 <link rel="stylesheet" type="text/css" href="sunlight/src/themes/sunlight.default.css" />
 <style>
 .sunlight-container {
-    margin: 1rem 0 !important;
+    margin: 1rem auto !important;
 }
 .main {
     margin: 1rem; 
     border:1px solid #aaa; 
     overflow: auto; 
     padding: 0 1rem; 
-    max-height: 640px;
+    max-height: calc( 100vh - 120px );
+    height: 100vh;
 }
 button {
     margin: 0.5rem 1rem;
@@ -113,7 +114,8 @@ function copyClipboard() {
     <div class="main">
         <pre id="code" 
              class="sunlight-highlight-mysql" 
-             style="font-size:16px !important; line-height:1rem">{{content}}</pre>
+             style="font-size:16px !important; line-height:1.2rem">{{content}}
+        </pre>
     </div>
 
     <script type="text/javascript"  src="sunlight/src/highliter.js"></script>

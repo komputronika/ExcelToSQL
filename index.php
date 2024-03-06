@@ -87,7 +87,7 @@ foreach ($regions as $name => $mask)
 
                         <p class="card-text">
 
-<form id="convert-form" method="POST" action="convert2.php" enctype="multipart/form-data">
+<form id="convert-form" method="POST" action="convert3.php" enctype="multipart/form-data">
   <div class="form-group">
     <label for="file"><b>Choose Excel file</b></label>
     <input type="file" accept=".xls,.xlsx" class="form-control-file" id="file" name="file">

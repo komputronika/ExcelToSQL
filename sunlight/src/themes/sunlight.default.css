@@ -12,13 +12,14 @@
 	background-color: #FFFFFF !important;
 }
 .sunlight-highlighted, .sunlight-container, .sunlight-container textarea, .sunlight-container pre {
-	font-family: Monospaced, "Fira Sans", "Free Mono",Consolas, Inconsolata, Monaco, "Courier New" !important;
+	font-family: "Fira Code", "Free Mono",Consolas, Inconsolata, Monaco, "Courier New", Monospace !important;
 	font-size: 16px !important;
-	line-height: 16px !important;
+	line-height: 1.2rem !important;
 }
 .sunlight-highlighted, .sunlight-container textarea {
 	color: #000000 !important;
 	margin: 0 !important;
+    
 }
 .sunlight-container textarea {
 	padding-left: 0 !important;
