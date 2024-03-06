@@ -2,4 +2,4 @@ r
 upload/*.xls
 errors.log
 *.sql
-
+.~*
