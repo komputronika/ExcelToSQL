@@ -1,3 +1,4 @@
+rethinkdb_data/
 r
 upload/*.xls
 errors.log
