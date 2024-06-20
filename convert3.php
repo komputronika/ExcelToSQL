@@ -682,8 +682,11 @@ foreach ($data as $table_name => $col)
     // Partition 
     //============================
 
-    $sql .= "\nPARTITION BY HASH($id_col)\n";
-    $sql .= "PARTITIONS 20;\n";
+    // $sql .= "\nPARTITION BY HASH($id_col)\n";
+    // $sql .= "PARTITIONS 20";
+
+    $sql .= ";\n";
+
 
     // $sql .= "\nPARTITION BY RANGE (".$id_col.")\n";
     // $sql .= "(\n";
